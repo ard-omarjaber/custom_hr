@@ -14,7 +14,7 @@ from datetime import date
 from hrms.hr.doctype.leave_control_panel.leave_control_panel import LeaveControlPanel
 from hrms.hr.doctype.leave_policy_assignment.leave_policy_assignment import LeavePolicyAssignment
 
-
+# customize leave allocation creation to execlude some leave type condition
 class CustomLeaveControlPanel(LeaveControlPanel):
     @frappe.whitelist()
     def allocate_leave(self):
@@ -82,7 +82,7 @@ class CustomLeaveControlPanel(LeaveControlPanel):
 
 
 
-
+# customize leave allocation creation to execlude some leave type condition
 class CustomLeavePolicyAssignment(LeavePolicyAssignment):
     def on_submit(self):
         self.grant_leave_alloc_for_employee()
@@ -182,7 +182,6 @@ class CustomLeavePolicyAssignment(LeavePolicyAssignment):
             pass
 
 
-
 def get_leave_type_details():
     leave_type_details = frappe._dict()
     leave_types = frappe.get_all(
@@ -207,7 +206,7 @@ def get_leave_type_details():
 
 
 
-
+# filter leave type field to show just the allowed for employee so he can apply to
 @frappe.whitelist()
 def get_leave_type(doctype, txt, searchfield, start, page_len, filters):
     employee_id = filters.get('employee_id')
@@ -249,10 +248,9 @@ def get_leave_type(doctype, txt, searchfield, start, page_len, filters):
 
 
 
-
+# This script will work daily to check if the date today is 25 then check the child table in the leave settings doctype which has a list of employees who are lower than 50 years and experience years is less than 20 for example and compensate the leave balance difference.
 def check_update_leave_balance():
-    # if getdate(nowdate()).day == 25:
-    if 1==1:
+    if getdate(nowdate()).day == 25:
 
         leave_control_employee_child = frappe.get_doc("Leave Settings")
 
@@ -283,10 +281,7 @@ def check_update_leave_balance():
         leave_control_employee_child.save()
 
 
-
-
-
-
+# Get age if inserted date
 def get_age(dob):
     today = date.today()
     return today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
