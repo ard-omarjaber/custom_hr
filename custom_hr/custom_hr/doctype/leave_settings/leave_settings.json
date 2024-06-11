@@ -1,0 +1,82 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-06-10 11:15:25.408047",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "experience_age",
+  "column_break_acrpl",
+  "experience_years",
+  "section_break_u5pwo",
+  "leave_control_employee_tab"
+ ],
+ "fields": [
+  {
+   "default": "0",
+   "fieldname": "experience_age",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Experience Age (In Years)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_acrpl",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "experience_years",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Experience Years (In Years)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_u5pwo",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "leave_control_employee_tab",
+   "fieldtype": "Table",
+   "label": "Leave Control Employee",
+   "options": "Leave Control Employee",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2024-06-11 09:14:21.024553",
+ "modified_by": "Administrator",
+ "module": "Custom HR",
+ "name": "Leave Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "HR Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

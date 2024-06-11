@@ -108,42 +108,25 @@ app_license = "MIT"
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-# 	"ToDo": "custom_app.overrides.CustomToDo"
-# }
+override_doctype_class = {
+	"Leave Control Panel": "custom_hr.api_utils.CustomLeaveControlPanel",
+	"Leave Policy Assignment": "custom_hr.api_utils.CustomLeavePolicyAssignment"
+}
 
 # Document Events
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
 
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"custom_hr.tasks.all"
-# 	],
-# 	"daily": [
-# 		"custom_hr.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"custom_hr.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"custom_hr.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"custom_hr.tasks.monthly"
-# 	],
-# }
+scheduler_events = {
+	"daily": [
+		"custom_hr.api_utils.check_update_leave_balance"
+	]
+}
+
 
 # Testing
 # -------
