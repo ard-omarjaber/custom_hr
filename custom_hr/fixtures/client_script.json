@@ -1,0 +1,13 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Leave Application",
+  "enabled": 1,
+  "modified": "2024-06-10 14:40:27.128170",
+  "module": "Custom HR",
+  "name": "Leave Application CS",
+  "script": "frappe.ui.form.on('Leave Application', {\n    validate(frm) {\n        frappe.call({\n            method: 'custom_hr.api_utils.validate_leave_appplication_creation',\n            args: {\n                employee: cur_frm.doc.employee,\n                leave_type: cur_frm.doc.leave_type\n            },\n            callback: function(r) {\n                console.log(r.message)\n            }\n        }); \n    },\n    setup(frm) {\n        if(!cur_frm.doc.employee){\n            frm.set_query(\"leave_type\", function () {\n                return {\n                    filters: [\n                        [\"Leave Type\",\"name\", \"=\", '']\n                    ]\n                };\n            });\n        }else{\n            frm.set_query(\"leave_type\", function () {\n                return {\n                    query: \"custom_hr.api_utils.get_leave_type\",\n                    filters: {\n                        employee_id: frm.doc.employee\n                    }\n                };\n            });\n        }\n\n    },\n    employee(frm) {\n\n        frm.set_query(\"leave_type\", function () {\n            return {\n                query: \"custom_hr.api_utils.get_leave_type\",\n                filters: {\n                    employee_id: frm.doc.employee\n                }\n            };\n        });\n\n    }\n})",
+  "view": "Form"
+ }
+]

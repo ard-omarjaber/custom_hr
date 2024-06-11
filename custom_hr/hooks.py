@@ -196,3 +196,10 @@ scheduler_events = {
 # auth_hooks = [
 # 	"custom_hr.auth.validate"
 # ]
+
+
+
+fixtures = ["Client Script"]
+
+
+
