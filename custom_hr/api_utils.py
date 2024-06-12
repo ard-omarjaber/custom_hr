@@ -35,7 +35,7 @@ class CustomLeaveControlPanel(LeaveControlPanel):
             try:
                 if female_only and (employee_marital_status!='Married' or employee_gender!='Female'):
                     pass
-                elif frappe.db.exists("Leave Application", {"employee": cstr(d[0]), "leave_type": self.leave_type, "docstatus": 1, "status": 'Approved'}):
+                elif one_time_use and frappe.db.exists("Leave Application", {"employee": cstr(d[0]), "leave_type": self.leave_type, "docstatus": 1, "status": 'Approved'}):
                     pass
                 else:
                     la = frappe.new_doc("Leave Allocation")
@@ -109,7 +109,7 @@ class CustomLeavePolicyAssignment(LeavePolicyAssignment):
 
                 if female_only and (employee_marital_status!='Married' or employee_gender!='Female'):
                     pass
-                elif frappe.db.exists("Leave Application", {"employee": self.employee, "leave_type": leave_details.name, "docstatus": 1, "status": 'Approved'}):
+                elif one_time_use and frappe.db.exists("Leave Application", {"employee": self.employee, "leave_type": leave_details.name, "docstatus": 1, "status": 'Approved'}):
                     pass
                 else:
                     if not leave_details.is_lwp:
@@ -143,7 +143,7 @@ class CustomLeavePolicyAssignment(LeavePolicyAssignment):
         try:
             if female_only and (employee_marital_status!='Married' or employee_gender!='Female'):
                 pass
-            elif frappe.db.exists("Leave Application", {"employee": self.employee, "leave_type": leave_details.name, "docstatus": 1, "status": 'Approved'}):
+            elif one_time_use and frappe.db.exists("Leave Application", {"employee": self.employee, "leave_type": leave_details.name, "docstatus": 1, "status": 'Approved'}):
                 pass
             else:
                 allocation = frappe.get_doc(
@@ -224,7 +224,7 @@ def get_leave_type(doctype, txt, searchfield, start, page_len, filters):
             if leave_type.name not in ignored_leaves_type:
                 ignored_leaves_type.append(leave_type.name)
         
-        if frappe.db.exists("Leave Application", {"employee": employee_id, "leave_type": leave_type.name, "docstatus": 1, "status": 'Approved'}):
+        if leave_type.custom_one_time_use and frappe.db.exists("Leave Application", {"employee": employee_id, "leave_type": leave_type.name, "docstatus": 1, "status": 'Approved'}):
             if leave_type.name not in ignored_leaves_type:
                 ignored_leaves_type.append(leave_type.name)
 
