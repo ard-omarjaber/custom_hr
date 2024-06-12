@@ -1,4 +1,4 @@
-![image](https://github.com/ard-omarjaber/custom_hr/assets/172369062/634ab0bb-0fc0-44cc-b648-47ff406af082)## Custom HR
+## Custom HR
 
 This app contains this updates:
 
