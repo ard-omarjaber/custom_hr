@@ -51,7 +51,9 @@ class CustomLeaveControlPanel(LeaveControlPanel):
                     la.save()
                     leave_allocated_for.append(d[0])
 
-                    if self.leave_type=='Annual Leave':
+
+                    annual_leave_type = frappe.get_value("Leave Type", filters = {"custom_is_annual_leave": 1}, fieldname = "name") or None
+                    if annual_leave_type and self.leave_type==annual_leave_type:
                         leave_control_employee_child = frappe.get_doc("Leave Settings")
 
                         child_table = leave_control_employee_child.get('leave_control_employee_tab')
@@ -161,7 +163,8 @@ class CustomLeavePolicyAssignment(LeavePolicyAssignment):
                 allocation.save(ignore_permissions=True)
                 allocation.submit()
 
-                if leave_details.name=='Annual Leave':
+                annual_leave_type = frappe.get_value("Leave Type", filters = {"custom_is_annual_leave": 1}, fieldname = "name") or None
+                if annual_leave_type and leave_details.name==annual_leave_type:
                     leave_control_employee_child = frappe.get_doc("Leave Settings")
 
                     child_table = leave_control_employee_child.get('leave_control_employee_tab')
