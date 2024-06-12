@@ -253,7 +253,8 @@ def get_leave_type(doctype, txt, searchfield, start, page_len, filters):
 
 # This script will work daily to check if the date today is 25 then check the child table in the leave settings doctype which has a list of employees who are lower than 50 years and experience years is less than 20 for example and compensate the leave balance difference.
 def check_update_leave_balance():
-    if getdate(nowdate()).day == 25:
+    # if getdate(nowdate()).day == 25:
+    if 1==1:
 
         leave_control_employee_child = frappe.get_doc("Leave Settings")
 
