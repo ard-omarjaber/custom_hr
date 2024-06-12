@@ -15,7 +15,7 @@
  ],
  "fields": [
   {
-   "default": "0",
+   "default": "50",
    "fieldname": "experience_age",
    "fieldtype": "Int",
    "in_list_view": 1,
@@ -27,7 +27,7 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "0",
+   "default": "20",
    "fieldname": "experience_years",
    "fieldtype": "Int",
    "in_list_view": 1,
@@ -49,7 +49,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-06-11 09:14:21.024553",
+ "modified": "2024-06-12 11:19:50.121999",
  "modified_by": "Administrator",
  "module": "Custom HR",
  "name": "Leave Settings",
