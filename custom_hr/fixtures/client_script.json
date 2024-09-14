@@ -2,6 +2,28 @@
  {
   "docstatus": 0,
   "doctype": "Client Script",
+  "dt": "Salary Structure Assignment",
+  "enabled": 0,
+  "modified": "2024-01-31 14:27:19.730745",
+  "module": null,
+  "name": "1111",
+  "script": "frappe.ui.form.on('Salary Structure Assignment', {\n\t validate: function(frm){\n        const family_allowance = frm.doc.custom_family_allowance \n        const housing_allowance = frm.doc.custom_housing_allowance\n\n        if (frm.doc.custom_net_salary){\n            var TT = 0\n            if (frm.doc.custom_marital_status == \"Single\"){\n                TT = 150\n            }\n            else if (frm.doc.custom_marital_status == \"Married\"){\n                TT = 200 + 25 * frm.doc.custom_number_of_children\n            }\n            else{\n                TT = 150\n            }\n            console.log(TT)\n            var supervisory = frm.doc.custom_net_salary * frm.doc.custom_supervisory\n            var leadership = frm.doc.custom_net_salary * frm.doc.custom_leadership\n            // var performance = (frm.doc.custom_net_salary +  housing_allowance + family_allowance + frm.doc.custom_transport +  supervisory + leadership ) * frm.doc.custom_performance_factor\n            var performance = (frm.doc.custom_net_salary +  housing_allowance + family_allowance +  supervisory + leadership ) * frm.doc.custom_performance_factor\n            var reward = frm.doc.custom_reward\n            var risk = (frm.doc.custom_net_salary +  housing_allowance  ) * frm.doc.custom_risk\n            var total_net = frm.doc.custom_net_salary + family_allowance + housing_allowance + supervisory + leadership + performance + reward + risk\n\n            // \u062a\u0648\u0632\u064a\u0639 \u062d\u062f \u0627\u0644\u0627\u0639\u0641\u0627\u0621 \u0628\u064a\u0646 \u0645\u0643\u0648\u0646\u0627\u062a \u0627\u0644\u0631\u0627\u062a\u0628 \u0627\u0644\u0623\u0633\u0627\u0633\u064a\u0629 \u0627\u0644\u062f\u0627\u062e\u0644\u0629 \u0641\u064a \u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u062a\u0631\u0641\u064a\u0639\n            // Tb ==> T base ,  Th ==> T housing  , Tf ==> T Family\n\n            var Tb =  (frm.doc.custom_net_salary / total_net) * TT \n            var Th =  (housing_allowance / total_net) * TT \n            var Tf =  (family_allowance / total_net) * TT \n            var TR =  (reward / total_net) * TT \n\n            var b50 = (frm.doc.custom_net_salary / total_net) * 50\n            var H50 = (housing_allowance / total_net) * 50\n            var F50 = (family_allowance / total_net) * 50\n            var R50 = (reward / total_net) * 50\n\n            var increased_base = (frm.doc.custom_net_salary - 0.1 * Tb - b50 ) / 0.8167125\n            var increased_housing_allowance = (housing_allowance  - 0.1 * Th - H50) / 0.8167125\n            var increased_family_allowance = (family_allowance - 0.1 * Tf - F50 ) / 0.8613\n            var increased_reward = (reward - 0.1 * TR - R50 ) / 0.8167125\n\n            frm.set_value('base' , increased_base)\n            frm.set_value('custom_increased_housing_allowance' , increased_housing_allowance)\n            frm.set_value('custom_increased_family_allowance' , increased_family_allowance)\n            frm.set_value('custom_increased_reward' , increased_reward)\n            frm.refresh_field(\"base\")\n            frm.refresh_field(\"custom_increased_housing_allowance\")\n            frm.refresh_field(\"custom_increased_family_allowance\")\n            frm.refresh_field(\"frm.doc.custom_increased_reward\")\n        }\t}\n})",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Additional Salary",
+  "enabled": 1,
+  "modified": "2024-04-18 11:24:41.174996",
+  "module": null,
+  "name": "statistical componenet",
+  "script": "frappe.ui.form.on('Additional Salary', {\n// change query to shoe the statistical componenet\n    set_component_query: function(frm) {\n        if (!frm.doc.company) return;\n        let filters = {company: frm.doc.company};\n        if (frm.doc.type) {\n            filters.type = \"Erning\";\n        }\n        frm.set_query(\"salary_component\", function() {\n            return {\n                // filters: filters\n            };\n        });\n    },\n})",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
   "dt": "Leave Application",
   "enabled": 1,
   "modified": "2024-06-12 11:18:18.753016",
