@@ -1,0 +1,79 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-08-28 11:49:25.901908",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "employee",
+  "employee_name",
+  "total_years_of_experience",
+  "employee_age",
+  "new_leaves_allocated",
+  "leave_allocation"
+ ],
+ "fields": [
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Employee",
+   "options": "Employee",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "leave_allocation",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Leave Allocation",
+   "options": "Leave Allocation",
+   "read_only": 1
+  },
+  {
+   "fieldname": "new_leaves_allocated",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "New Leaves Allocated",
+   "reqd": 1
+  },
+  {
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Employee Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "total_years_of_experience",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Total years of experience",
+   "read_only": 1
+  },
+  {
+   "fieldname": "employee_age",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Employee Age",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-09-14 14:52:30.292582",
+ "modified_by": "Administrator",
+ "module": "Custom HR",
+ "name": "Employee Group Leave Allocation",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

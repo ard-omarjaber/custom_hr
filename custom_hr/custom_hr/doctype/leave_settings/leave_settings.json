@@ -7,6 +7,10 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "automatic_category_1_balance_value",
+  "column_break_n3i3d",
+  "automatic_category_2_balance_value",
+  "section_break_rvege",
   "experience_age",
   "column_break_acrpl",
   "experience_years",
@@ -19,7 +23,7 @@
    "fieldname": "experience_age",
    "fieldtype": "Int",
    "in_list_view": 1,
-   "label": "Experience Age (In Years)",
+   "label": "Age (In Years)",
    "reqd": 1
   },
   {
@@ -44,12 +48,32 @@
    "label": "Leave Control Employee",
    "options": "Leave Control Employee",
    "read_only": 1
+  },
+  {
+   "fieldname": "automatic_category_1_balance_value",
+   "fieldtype": "Float",
+   "label": "Automatic Category 1 balance value",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "column_break_n3i3d",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "automatic_category_2_balance_value",
+   "fieldtype": "Float",
+   "label": "Automatic Category 2 balance value",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "section_break_rvege",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-06-12 11:19:50.121999",
+ "modified": "2024-09-14 13:33:26.658456",
  "modified_by": "Administrator",
  "module": "Custom HR",
  "name": "Leave Settings",
