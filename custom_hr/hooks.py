@@ -8,7 +8,6 @@ app_license = "MIT"
 # Includes in <head>
 # ------------------
 
-
 # include js, css files in header of desk.html
 # app_include_css = "/assets/custom_hr/css/custom_hr.css"
 # app_include_js = "/assets/custom_hr/js/custom_hr.js"
