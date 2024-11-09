@@ -208,7 +208,6 @@ def get_leave_type_details():
 
 
 
-
 # filter leave type field to show just the allowed for employee so he can apply to
 @frappe.whitelist()
 def get_leave_type(doctype, txt, searchfield, start, page_len, filters):
