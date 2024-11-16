@@ -34,16 +34,6 @@
  ],
  "fields": [
   {
-   "fieldname": "leave_type",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
-   "label": "Leave Type",
-   "options": "Leave Type",
-   "reqd": 1
-  },
-  {
    "fieldname": "from_date",
    "fieldtype": "Date",
    "in_list_view": 1,
@@ -159,7 +149,6 @@
   },
   {
    "default": "0",
-   "fetch_from": "leave_type.custom_is_annual_leave",
    "fieldname": "is_annual_leave",
    "fieldtype": "Check",
    "label": "Is Annual Leave"
@@ -177,12 +166,22 @@
    "fieldname": "add_unused_leaves_from_previous_allocations",
    "fieldtype": "Check",
    "label": "Add unused leaves from previous allocations"
+  },
+  {
+   "fieldname": "leave_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Leave Type",
+   "options": "Leave Type",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-09-14 15:48:08.366254",
+ "modified": "2024-11-16 13:51:49.561083",
  "modified_by": "Administrator",
  "module": "Custom HR",
  "name": "Group Leave Allocation",

@@ -13,6 +13,10 @@ import math
 
 
 class GroupLeaveAllocation(Document):
+	def validate(self):
+		pass
+
+
 	def on_submit(self):
 		self.create_leave_allocation()	
 
