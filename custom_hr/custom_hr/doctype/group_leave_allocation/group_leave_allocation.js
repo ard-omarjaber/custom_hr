@@ -2,7 +2,13 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Group Leave Allocation', {
+	leave_type(frm){
+		is_annual_leave = frappe.db.get_value('Leave Type', frm.doc.leave_type, 'custom_is_annual_leave')
+		frm.set_value('is_annual_leave',is_annual_leave);
+		frm.refresh_field('is_annual_leave');
 
+
+	},
 	is_annual_leave(frm) {
 		if(frm.doc.is_annual_leave == 1){
 			frappe.call({
@@ -15,7 +21,8 @@ frappe.ui.form.on('Group Leave Allocation', {
 						console.log(r.message);
 						frm.set_value('category_1', r.message.category_1);
 						frm.set_value('category_2', r.message.category_2);
-						// frm.refresh_fields();
+						frm.refresh_field('category_1');
+						frm.refresh_field('category_2');
 					}
 				}
 			});
