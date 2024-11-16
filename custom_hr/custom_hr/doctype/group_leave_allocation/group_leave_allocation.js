@@ -15,7 +15,7 @@ frappe.ui.form.on('Group Leave Allocation', {
 						console.log(r.message);
 						frm.set_value('category_1', r.message.category_1);
 						frm.set_value('category_2', r.message.category_2);
-						frm.refresh_fields();
+						// frm.refresh_fields();
 					}
 				}
 			});
