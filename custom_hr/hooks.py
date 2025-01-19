@@ -123,8 +123,11 @@ override_doctype_class = {
 
 scheduler_events = {
 	"daily": [
-		"custom_hr.api_utils.check_update_leave_balance"
-	]
+		# "custom_hr.api_utils.check_update_leave_balance"
+	],
+	"monthly": [
+		"custom_hr.api_utils.increase_employee_monthly_leave_balance_bounya"
+	],
 }
 
 
@@ -198,8 +201,9 @@ scheduler_events = {
 # ]
 
 
-
-fixtures = ["Client Script"]
+fixtures = [
+        {"dt": "Client Script", "filters": [["module", "in", ["Custom HR"]]]},
+    ]
 
 
 

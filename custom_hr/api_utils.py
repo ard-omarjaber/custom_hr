@@ -32,11 +32,26 @@ class CustomLeaveControlPanel(LeaveControlPanel):
 
             one_time_use = frappe.db.get_value("Leave Type", self.leave_type, "custom_one_time_use")
 
+            is_annual_leave = frappe.db.get_value("Leave Type", self.leave_type, "custom_is_annual_leave")
+
             try:
                 if female_only and (employee_marital_status!='Married' or employee_gender!='Female'):
                     pass
                 elif one_time_use and frappe.db.exists("Leave Application", {"employee": cstr(d[0]), "leave_type": self.leave_type, "docstatus": 1, "status": 'Approved'}):
                     pass
+                elif is_annual_leave:
+                    la = frappe.new_doc("Leave Allocation")
+                    la.set("__islocal", 1)
+                    la.employee = cstr(d[0])
+                    la.employee_name = frappe.db.get_value("Employee", cstr(d[0]), "employee_name")
+                    la.leave_type = self.leave_type
+                    la.from_date = self.from_date
+                    la.to_date = self.to_date
+                    la.carry_forward = cint(self.carry_forward)
+                    la.new_leaves_allocated = flt(get_now_employee_leave_balance(cstr(d[0])))
+                    la.docstatus = 1
+                    la.save()
+                    leave_allocated_for.append(d[0])
                 else:
                     la = frappe.new_doc("Leave Allocation")
                     la.set("__islocal", 1)
@@ -52,21 +67,21 @@ class CustomLeaveControlPanel(LeaveControlPanel):
                     leave_allocated_for.append(d[0])
 
 
-                    annual_leave_type = frappe.get_value("Leave Type", filters = {"custom_is_annual_leave": 1}, fieldname = "name") or None
-                    if annual_leave_type and self.leave_type==annual_leave_type:
-                        leave_control_employee_child = frappe.get_doc("Leave Settings")
+                    # annual_leave_type = frappe.get_value("Leave Type", filters = {"custom_is_annual_leave": 1}, fieldname = "name") or None
+                    # if annual_leave_type and self.leave_type==annual_leave_type:
+                    #     leave_control_employee_child = frappe.get_doc("Leave Settings")
 
-                        child_table = leave_control_employee_child.get('leave_control_employee_tab')
-                        for item in child_table:
-                            if item.employee == cstr(d[0]):
-                                child_table.remove(item)
+                    #     child_table = leave_control_employee_child.get('leave_control_employee_tab')
+                    #     for item in child_table:
+                    #         if item.employee == cstr(d[0]):
+                    #             child_table.remove(item)
 
-                        if flt(self.no_of_days) < 40:
-                            leave_control_employee_child.append('leave_control_employee_tab', {
-                                "employee": cstr(d[0]),
-                                "leave_allocation": la.name
-                            })
-                            leave_control_employee_child.save()
+                    #     if flt(self.no_of_days) < 40:
+                    #         leave_control_employee_child.append('leave_control_employee_tab', {
+                    #             "employee": cstr(d[0]),
+                    #             "leave_allocation": la.name
+                    #         })
+                    #         leave_control_employee_child.save()
 
             except Exception:
                 pass
@@ -140,11 +155,30 @@ class CustomLeavePolicyAssignment(LeavePolicyAssignment):
 
         one_time_use = frappe.db.get_value("Leave Type", leave_details.name, "custom_one_time_use")
 
+        is_annual_leave = frappe.db.get_value("Leave Type", leave_details.name, "custom_is_annual_leave")
+
         try:
             if female_only and (employee_marital_status!='Married' or employee_gender!='Female'):
                 pass
             elif one_time_use and frappe.db.exists("Leave Application", {"employee": self.employee, "leave_type": leave_details.name, "docstatus": 1, "status": 'Approved'}):
                 pass
+            elif is_annual_leave:
+                allocation = frappe.get_doc(
+                    dict(
+                        doctype="Leave Allocation",
+                        employee=self.employee,
+                        leave_type=leave_details.name,
+                        from_date=self.effective_from,
+                        to_date=self.effective_to,
+                        new_leaves_allocated=flt(get_now_employee_leave_balance(self.employee)),
+                        leave_period=self.leave_period if self.assignment_based_on == "Leave Policy" else "",
+                        leave_policy_assignment=self.name,
+                        leave_policy=self.leave_policy,
+                        carry_forward=carry_forward,
+                    )
+                )
+                allocation.save(ignore_permissions=True)
+                allocation.submit()
             else:
                 allocation = frappe.get_doc(
                     dict(
@@ -163,21 +197,21 @@ class CustomLeavePolicyAssignment(LeavePolicyAssignment):
                 allocation.save(ignore_permissions=True)
                 allocation.submit()
 
-                annual_leave_type = frappe.get_value("Leave Type", filters = {"custom_is_annual_leave": 1}, fieldname = "name") or None
-                if annual_leave_type and leave_details.name==annual_leave_type:
-                    leave_control_employee_child = frappe.get_doc("Leave Settings")
+                # annual_leave_type = frappe.get_value("Leave Type", filters = {"custom_is_annual_leave": 1}, fieldname = "name") or None
+                # if annual_leave_type and leave_details.name==annual_leave_type:
+                #     leave_control_employee_child = frappe.get_doc("Leave Settings")
 
-                    child_table = leave_control_employee_child.get('leave_control_employee_tab')
-                    for item in child_table:
-                        if item.employee == self.employee:
-                            child_table.remove(item)
+                #     child_table = leave_control_employee_child.get('leave_control_employee_tab')
+                #     for item in child_table:
+                #         if item.employee == self.employee:
+                #             child_table.remove(item)
 
-                    if flt(new_leaves_allocated) < 40:
-                        leave_control_employee_child.append('leave_control_employee_tab', {
-                            "employee": self.employee,
-                            "leave_allocation": allocation.name
-                        })
-                        leave_control_employee_child.save()
+                #     if flt(new_leaves_allocated) < 40:
+                #         leave_control_employee_child.append('leave_control_employee_tab', {
+                #             "employee": self.employee,
+                #             "leave_allocation": allocation.name
+                #         })
+                #         leave_control_employee_child.save()
 
 
                 return allocation.name, new_leaves_allocated
@@ -282,6 +316,56 @@ def check_update_leave_balance():
                     print("Increase leave balance for employee: {0}".format(emp.employee_name))
 
         leave_control_employee_child.save()
+
+
+
+
+
+def increase_employee_monthly_leave_balance_bounya():
+    annual_leave = frappe.get_value("Leave Type", filters = {"custom_is_annual_leave": 1}, fieldname = "name") or None
+
+    if annual_leave:
+        employees = frappe.get_all("Employee",filters = {"status": "Active"}, fields = ["name"])
+        for emp in employees:
+            try:
+                monthly_leave_balance = get_now_employee_leave_balance(emp.name)
+
+                allocation = frappe.db.sql(f"select name from `tabLeave Allocation` where leave_type='{annual_leave}' and employee='{emp.name}' and '{nowdate()}' between from_date and to_date order by to_date desc limit 1", as_dict=True)
+                if allocation:
+                    allocation_name = allocation[0].get("name")
+                
+                    doc = frappe.get_doc('Leave Allocation', allocation_name)
+                    leave_balance = flt(doc.new_leaves_allocated) + flt(monthly_leave_balance)
+                    doc.new_leaves_allocated = leave_balance
+                    doc.total_leaves_allocated = doc.unused_leaves+leave_balance
+                    doc.save()
+
+                    print("Increase monthly leave balance for employee: {0}".format(emp.name))
+            
+            except Exception as e:
+                print('Error in Monthly Leave Balance Update')
+
+
+
+
+def get_now_employee_leave_balance(employee):
+    default_leave_balance = 2.5
+    increased_leave_balance = 3.75
+
+    leave_settings = frappe.get_doc("Leave Settings")
+    experience_age = leave_settings.experience_age or 50
+    experience_years = leave_settings.experience_years or 20
+
+    emp = frappe.get_doc("Employee", employee)
+    employee_experience = getattr(emp, "custom_total_insed_experience_in_years", 0)
+    employee_age = get_age(emp.date_of_birth) if emp.date_of_birth else 0
+
+    if employee_age >= int(experience_age) or int(employee_experience) >= int(experience_years):
+        return increased_leave_balance
+
+    return default_leave_balance
+
+
 
 
 # Get age if inserted date
