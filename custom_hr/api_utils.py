@@ -155,30 +155,12 @@ class CustomLeavePolicyAssignment(LeavePolicyAssignment):
 
         one_time_use = frappe.db.get_value("Leave Type", leave_details.name, "custom_one_time_use")
 
-        is_annual_leave = frappe.db.get_value("Leave Type", leave_details.name, "custom_is_annual_leave")
 
         try:
             if female_only and (employee_marital_status!='Married' or employee_gender!='Female'):
                 pass
             elif one_time_use and frappe.db.exists("Leave Application", {"employee": self.employee, "leave_type": leave_details.name, "docstatus": 1, "status": 'Approved'}):
                 pass
-            elif is_annual_leave:
-                allocation = frappe.get_doc(
-                    dict(
-                        doctype="Leave Allocation",
-                        employee=self.employee,
-                        leave_type=leave_details.name,
-                        from_date=self.effective_from,
-                        to_date=self.effective_to,
-                        new_leaves_allocated=flt(get_now_employee_leave_balance(self.employee)),
-                        leave_period=self.leave_period if self.assignment_based_on == "Leave Policy" else "",
-                        leave_policy_assignment=self.name,
-                        leave_policy=self.leave_policy,
-                        carry_forward=carry_forward,
-                    )
-                )
-                allocation.save(ignore_permissions=True)
-                allocation.submit()
             else:
                 allocation = frappe.get_doc(
                     dict(
