@@ -339,7 +339,7 @@ def get_now_employee_leave_balance(employee):
     experience_years = leave_settings.experience_years or 20
 
     emp = frappe.get_doc("Employee", employee)
-    employee_experience = getattr(emp, "custom_total_insed_experience_in_years", 0)
+    employee_experience = getattr(emp, "custom_total_experience_in_years", 0)
     employee_age = get_age(emp.date_of_birth) if emp.date_of_birth else 0
 
     if employee_age >= int(experience_age) or int(employee_experience) >= int(experience_years):
