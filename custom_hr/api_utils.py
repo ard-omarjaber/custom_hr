@@ -233,16 +233,27 @@ def get_leave_type(doctype, txt, searchfield, start, page_len, filters):
     employee_gender = frappe.db.get_value("Employee", employee_id, "gender")
     employee_marital_status= frappe.db.get_value("Employee", employee_id, "marital_status")
 
+    first_day_of_month = get_first_day(nowdate())
+    last_day_of_month = get_last_day(nowdate())
+
     leave_types = frappe.get_all("Leave Type", filters={}, fields=["*"])
     for leave_type in leave_types:
+        # Condition: Female-only leave
         if leave_type.custom_female_only and (employee_marital_status!='Married' or employee_gender!='Female'):
             if leave_type.name not in ignored_leaves_type:
                 ignored_leaves_type.append(leave_type.name)
         
+        # Condition: One-time use only
         if leave_type.custom_one_time_use and frappe.db.exists("Leave Application", {"employee": employee_id, "leave_type": leave_type.name, "docstatus": 1, "status": 'Approved'}):
             if leave_type.name not in ignored_leaves_type:
                 ignored_leaves_type.append(leave_type.name)
 
+        # Condition: Once every month
+        if leave_type.custom_once_every_month and frappe.db.exists("Leave Application", {"employee": employee_id,"leave_type": leave_type.name,"docstatus": 1,"status": 'Approved',"from_date": (">=", first_day_of_month),"to_date": ("<=", last_day_of_month)}):
+            if leave_type.name not in ignored_leaves_type:
+                ignored_leaves_type.append(leave_type.name)
+
+    # Convert to SQL-friendly format
     modified_string = ','.join(["'{0}'".format(lt) for lt in ignored_leaves_type])
 
     return frappe.db.sql("""select name from `tabLeave Type`
